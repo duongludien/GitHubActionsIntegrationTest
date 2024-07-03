@@ -33,7 +33,7 @@ jobs:
       with:
         url: jdbc:postgresql://postgres:5432/postgres
         user: postgres
-        password: postgres
+        password: NoPassword1
         locations: filesystem:./migration/sql
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
