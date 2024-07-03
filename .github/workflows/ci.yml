@@ -3,6 +3,9 @@
 
 name: .NET
 
+env:
+    SLN_PATH: './src/TestProject1/TestProject1.sln'
+
 on:
   push:
     branches: [ "main" ]
@@ -40,8 +43,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{env.SLN_PATH}} 
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
