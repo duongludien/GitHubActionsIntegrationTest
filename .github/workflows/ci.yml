@@ -22,6 +22,7 @@ jobs:
         image: postgres:13
         env:
           POSTGRES_PASSWORD: NoPassword1
+          POSTGRES_DB: TestDB
         ports:
           - 5432:5432
         options: >-
@@ -32,7 +33,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: joshuaavalon/flyway-action@v1
+    - uses: joshuaavalon/flyway-action@v3.0.0
       with:
         url: jdbc:postgresql://postgres:5432/postgres
         user: postgres
