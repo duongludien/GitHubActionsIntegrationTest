@@ -4,7 +4,7 @@
 name: .NET
 
 env:
-    SLN_PATH: './src/TestProject1/TestProject1.sln'
+    SLN_PATH: './src/TestProject1.sln'
 
 on:
   push:
