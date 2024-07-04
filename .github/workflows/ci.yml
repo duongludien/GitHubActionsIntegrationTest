@@ -4,7 +4,9 @@
 name: .NET
 
 env:
-    SLN_PATH: './src/TestProject1.sln'
+  SLN_PATH: './src/TestProject1.sln'
+  EF_PRJ_PATH: './src/EfCore'
+  API_PRJ_PATH: './src/Api'
 
 on:
   push:
@@ -44,5 +46,7 @@ jobs:
       run: dotnet restore ${{env.SLN_PATH}} 
     - name: Build
       run: dotnet build --no-restore ${{env.SLN_PATH}} 
+    - name: Apply migrations
+      run: dotnet ef database update -s ${{env.API_PRJ_PATH}} -p ${{env.EF_PRJ_PATH}}
     - name: Test
       run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
