@@ -53,6 +53,6 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ${{env.SLN_PATH}} 
     - name: Apply migrations
-      run: dotnet ef database update -s ${{env.API_PRJ_PATH}} -p ${{env.EF_PRJ_PATH}}
+      run: dotnet ef database update -s ${{env.API_PRJ_PATH}} -p ${{env.EF_PRJ_PATH}} --connection "Host=127.0.0.1;Username=${{env.PG_USR}};Password=${{env.PG_PWD}};Database=${{env.PG_TESTDB}}"
     - name: Test
       run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
