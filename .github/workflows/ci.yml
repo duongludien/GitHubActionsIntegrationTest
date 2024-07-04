@@ -1,9 +1,13 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: .NET CI
 
 env:
+  PG_USR: 'postgres'
+  PG_PWD: 'NoPassword1'
+  PG_DB: 'postgres'
+  PG_TESTDB: 'TestDB'
   SLN_PATH: './src/TestProject1.sln'
   EF_PRJ_PATH: './src/EfCore'
   API_PRJ_PATH: './src/Api'
@@ -23,8 +27,8 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_PASSWORD: NoPassword1
-          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: ${{env.PG_PWD}}
+          POSTGRES_DB: ${{env.PG_DB}}
         ports:
           - 5432:5432
         options: >-
@@ -37,7 +41,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Create database
       run: |
-        PGPASSWORD=NoPassword1 psql --host=127.0.0.1 --port 5432 --username=postgres -c 'create database "TestDB"'
+        PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -c 'create database "${{env.PG_TESTDB}}"'
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
