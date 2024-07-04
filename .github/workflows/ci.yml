@@ -8,6 +8,8 @@ env:
   PG_PWD: 'NoPassword1'
   PG_DB: 'postgres'
   PG_TESTDB: 'TestDB'
+  PG_SEEDS_DIR: 'seeds'
+  
   SLN_PATH: './src/TestProject1.sln'
   EF_PRJ_PATH: './src/EfCore'
   API_PRJ_PATH: './src/Api'
@@ -63,7 +65,7 @@ jobs:
     
     - name: Seed test data
       run: |
-        for filename in seeds/*sql; do
+        for filename in ${{env.PG_SEEDS_DIR}}/*sql; do
           PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -d "${{env.PG_TESTDB}}" -f "$filename"
         done
     
