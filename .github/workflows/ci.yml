@@ -26,7 +26,7 @@ jobs:
           postgresql db: postgres
           postgresql user: postgres
           postgresql password: NoPassword1
-          postgresql init scripts: ./seeds/
+          postgresql init scripts: seeds
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
