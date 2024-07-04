@@ -63,7 +63,9 @@ jobs:
     
     - name: Seed test data
       run: |
-        PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -d "${{env.PG_TESTDB}}" -f seeds/00_create_blogs.sql
+        for filename in seeds/*sql; do
+          PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -d "${{env.PG_TESTDB}}" -f "$filename"
+        done
     
     - name: Test
       run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
