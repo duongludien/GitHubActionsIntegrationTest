@@ -39,20 +39,31 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Create database
+    
+    - name: Create test database
       run: |
         PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -c 'create database "${{env.PG_TESTDB}}"'
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    
     - name: Install EF Core tools
       run: dotnet tool install --global dotnet-ef
+    
     - name: Restore dependencies
       run: dotnet restore ${{env.SLN_PATH}} 
+    
     - name: Build
       run: dotnet build --no-restore ${{env.SLN_PATH}} 
+    
     - name: Apply migrations
       run: dotnet ef database update -s ${{env.API_PRJ_PATH}} -p ${{env.EF_PRJ_PATH}} --connection "Host=127.0.0.1;Username=${{env.PG_USR}};Password=${{env.PG_PWD}};Database=${{env.PG_TESTDB}}"
+    
+    - name: Seed test data
+      run: |
+        PGPASSWORD=${{env.PG_PWD}} psql --host=127.0.0.1 --port 5432 --username=${{env.PG_USR}} -d "${{env.PG_TESTDB}}" -f seeds/00_create_blogs.sql
+    
     - name: Test
       run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
