@@ -1,0 +1,51 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+env:
+    SLN_PATH: './src/TestProject1.sln'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: NoPassword1
+          POSTGRES_DB: TestDB
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: joshuaavalon/flyway-action@v3.0.0
+      with:
+        url: jdbc:postgresql://postgres:5432/postgres
+        user: postgres
+        password: NoPassword1
+        locations: filesystem:./migration/sql
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore ${{env.SLN_PATH}} 
+    - name: Build
+      run: dotnet build --no-restore ${{env.SLN_PATH}} 
+    - name: Test
+      run: dotnet test --no-build --verbosity normal ${{env.SLN_PATH}} 
