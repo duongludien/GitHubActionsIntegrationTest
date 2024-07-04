@@ -1,0 +1,2 @@
+INSERT INTO "Blogs"("Url", "Title", "Content") VALUES ('http://www.abc.com', 'ABC Blog 1', 'This is the ABC blog 1');
+INSERT INTO "Blogs"("Url", "Title", "Content") VALUES ('http://www.abc.com', 'ABC Blog 2', 'This is the ABC blog 2');
