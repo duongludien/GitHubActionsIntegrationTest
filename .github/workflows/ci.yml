@@ -22,7 +22,7 @@ jobs:
         image: postgres:13
         env:
           POSTGRES_PASSWORD: NoPassword1
-          POSTGRES_DB: TestDB
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         options: >-
@@ -33,12 +33,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: joshuaavalon/flyway-action@v3.0.0
-      with:
-        url: jdbc:postgresql://postgres:5432/postgres
-        user: postgres
-        password: NoPassword1
-        locations: filesystem:./migration/sql
+    - name: Create database
+      run: |
+        PGPASSWORD=NoPassword1 psql --host=127.0.0.1 --port 5432 --username=postgres -c 'create database "TestDB"'
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
