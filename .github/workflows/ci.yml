@@ -19,7 +19,7 @@ jobs:
 
     services:
       postgres:
-        
+        image: postgres:13
         env:
           POSTGRES_PASSWORD: NoPassword1
           POSTGRES_DB: postgres
